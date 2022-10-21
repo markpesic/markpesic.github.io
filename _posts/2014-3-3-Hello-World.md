@@ -17,4 +17,12 @@ BYOL (Bootstrap Your Own Latent) uses 2 asymmetrical neural nets , one is called
 
 $$ \mathcal{L}(\theta, \eta) = \mathbb{E}_x, _\mathcal{T}[\lVert\mathcal{F} _\theta(\mathcal{T}(x) - \eta_x)\rVert ^2 _2] \qquad (1) $$
 
+$$ \min_{\theta,\eta} \mathcal{L}(\theta, \eta) \qquad (2) $$
+
+In (1) the loss is the average over the distribution of images and transformations for the cosine similarity loss between the projector of the online network and $ \eta $ (Notice that in (1) is not included the predictor). (2) is the objective that gets minimized respect to $\theta$ and $\eta$. So the optimization of the objective gets split in two subproblems :
+$$\theta^t = arg\min_{\theta} \mathcal{L}(\theta, \eta^t-1) \qquad (3)$$
+$$\eta^t = arg\min_{\eta} \mathcal{L}(\theta^t, \eta) \qquad (4)$$
+
+The first subproblem (3) is a solved applying the stopgradient to $\eta^t-1$ 
+
 
