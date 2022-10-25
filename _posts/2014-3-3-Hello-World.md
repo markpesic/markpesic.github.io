@@ -1,4 +1,4 @@
-# Unsupervised Non contrastive learning
+# Unsupervised Non contrastive learning in images
 
 In the last years Unsupervised learning made huge progress, performing really well in 
 Like supervised models.
@@ -6,12 +6,21 @@ Like supervised models.
 Unsupervised learning can be partitioned in two different families: contrastive and non contrastive learning. The former tries to learn an invariant (invariant to linear transforms and non linear one )image embeddings by comparing negative and positive samples.In this way the model learns useful features for downstream tasks. Now an important question is why we need to compare negative samples and positive samples in the first place. Now imagine training a siamese network (like most of JEPA) without a contrastive term loss. For example we could use as loss the MSE . When minimizing the loss to reach the minimum, the network would output constant features vector so the loss equals 0. Here comes in our help contrastive loss , like the hinge Loss, triplet loss .
 But there is a catch,even though contrastive losses allow the network to learn more useful embeddings, they require more memory(bigger batches) because you need to do negative sampling for the negative pairs. Some circumvent this problem by using memory banks, even then this requires using external memory. So to solve this problem Non-contrastive methods were developed.In this post we’ll cover BYOL, Barlow Twins and VicReg.In theory non-contrastive methods doesn’t need negative mining , memory banks and really big batch sizes (even though big batch sizes helps improving the performance).
 
+## Augmentations
+
+In all of this papers the input before getting fed through the network/s, it gets distorted in some kind of a way. Usually are used a series of augmentation.
+- Random Resized crop size
+- Random color jittering
+- Random Gaussian blur
+- Random horizontal flip
+- Random greyscale conversion
+etc...
+In all the methods below we used the same image augmentation as in [SIMCLR].
 ## BYOL
 
 ![byol images](https://github.com/markpesic/markpesic.github.io/blob/master/images/byol.png)
 
-BYOL (Bootstrap Your Own Latent) uses 2 asymmetrical neural nets , one is called online network and the other is called target network . The Online network has a predictor on top of the projector module, furthermore the target network doesn’t get updated through backprop, but uses EMA (Exponential moving average). The loss is a standard mean sqared error on normalized output embeddings. The images before getting passed into the network gets augmeted in 2 different views. Now it's unclear why this algorithm should work in the first place becuase it seems like , there’s nothing that stops the optimization process to let the 2 networks output constant embeddings so the loss is minimized, but this is not the case. In fact BYOL can learn really useful feature embeddings. In [2] [3] was observed that eliminating the stop-gradient or the predicator component leads to collapse representation. The target network gets updated by
-$$\xi \leftarrow \tau\xi + (1 - \tau)\theta \qquad(1)$$
+BYOL (Bootstrap Your Own Latent) uses 2 asymmetrical neural nets , one is called online network and the other is called target network . The Online network has a predictor on top of the projector module, furthermore the target network doesn’t get updated through backprop, but uses EMA (Exponential moving average). The loss is a standard mean sqared error on normalized output embeddings. The images before getting passed into the network gets augmeted in 2 different views. Now it's unclear why this algorithm should work in the first place becuase it seems like , there’s nothing that stops the optimization process to let the 2 networks output constant embeddings so the loss is minimized, but this is not the case. In fact BYOL can learn really useful feature embeddings. In [2] [3] was observed that eliminating the stop-gradient or the predicator component leads to collapse representation.
 
 - $\mathcal{T}$ data augmentation
 - $\mathcal{T}'$ data augmentation 
@@ -49,6 +58,21 @@ $$\mathcal{L}_ {BYOL'} = \lVert \hat{\mathcal{q}}'_ \theta - \hat{\mathcal{z}}'_
 
 $$\mathcal{L}_ {tot} = \mathcal{L}_ {BYOL} + \mathcal{L}_ {BYOL'} \qquad(9)$$
 
+Once we calculated the loss we can updated the online network and the target network, first of all we update the $\theta$ online network through an optimizer and by detaching the gradient for the target network.
+
+$$\theta \leftarrow optimizer(\theta, stopgrad(\xi), learning_rate)$$
+
+After the online network gets updated, it is the turn of the target network.
+$$\xi \leftarrow \tau\xi + (1 - \tau)\theta \qquad(1)$$
+
+The $\tau$ is a hyperparameter that has a vale between 0 and 1. SGD is used as the optimizer with weight decay and LARS applied to the online network.
+
+In the byol paper was also observed that there is also another way for optimizing the target network, that is simply multiplying the updated parameters of the online network
+by a scalar $\lambda$  
+
+$$\xi \leftarrow \lambda * \theta$$
+
+Another paper that takes from [1] is 
  In [2] The optimization process is hypothesized to be an EM algorithm Expectation-Maximization:
 
 $$ \mathcal{L}(\theta, \eta) = \mathbb{E}_x, _\mathcal{T}[\lVert\mathcal{F} _\theta(\mathcal{T}(x) - \eta_x)\rVert ^2 _2] \qquad (1) $$
