@@ -32,22 +32,22 @@ $$\mathcal{q}_ \theta \leftarrow \mathcal{h}_ \theta(z_\theta) \qquad (4)$$
 
 The output of the predictor and the output of the target projection gets normalized:
 
-$$\hat{mathcal{q}}_ \theta \leftarrow \dfrac{\mathcal{q}_ \theta {\lVert \mathcal{q}_ \theta \rVert}} \qquad (5)$$
+$$\hat{\mathcal{q}}_ \theta \leftarrow \dfrac{\mathcal{q}_ \theta}{\lVert \mathcal{q}_ \theta \rVert} \qquad (5)$$
 
-$$\hat{mathcal{z}}_ \xi \leftarrow \dfrac{\mathcal{z}_ \xi {\lVert \mathcal{z}_ \xi \rVert}} \qquad (6)$$
+$$\hat{\mathcal{z}}_ \xi \leftarrow \dfrac{\mathcal{z}_ \xi }{\lVert \mathcal{z}_ \xi \rVert} \qquad (6)$$
 
-The $\mathcal{L}_ BYOL$ is the MSE loss between two normalized vectors. This loss is applied twice, so that the loss is symmetrical.
+The $\mathcal{L}_ {BYOL}$ is the MSE loss between two normalized vectors. This loss is applied twice, so that the loss is symmetrical.
 Essentialy the 2 networks together outputs 4 vectors:
 - $\mathcal{q}_ \theta$ that comes from $\mathcal{T}(x)$
 - $\mathcal{q}'_ \theta$ that comes from $\mathcal{T}'(x)$
 - $\mathcal{z}_ \xi$ that comes from $\mathcal{T}'(x)$
 - $\mathcal{z}'_ \xi$ that comes from $\mathcal{T}(x)$. 
 
-$$\mathcal{L}_BYOL = \lVert \hat{\mathcal{q}}_ \theta - \hat{\mathcal{z}}_ \xi \rVert ^2 _2 \qquad (7)$$
+$$\mathcal{L}_ {BYOL} = \lVert \hat{\mathcal{q}}_ \theta - \hat{\mathcal{z}}_ \xi \rVert ^2 _2 \qquad (7)$$
 
-$$\mathcal{L}_BYOL' = \lVert \hat{\mathcal{q}}'_ \theta - \hat{\mathcal{z}}'_ \xi \rVert ^2 _2 \qquad (8)$$
+$$\mathcal{L}_ {BYOL'} = \lVert \hat{\mathcal{q}}'_ \theta - \hat{\mathcal{z}}'_ \xi \rVert ^2 _2 \qquad (8)$$
 
-$$\mathcal{L}_tot = \mathcal{L}_BYOL + \mathcal{L}_BYOL' \qquad(9)$$
+$$\mathcal{L}_ {tot} = \mathcal{L}_ {BYOL} + \mathcal{L}_ {BYOL'} \qquad(9)$$
 
  In [2] The optimization process is hypothesized to be an EM algorithm Expectation-Maximization:
 
