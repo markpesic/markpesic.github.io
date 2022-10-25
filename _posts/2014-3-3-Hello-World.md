@@ -28,9 +28,7 @@ $$\mathcal{z}_ \theta \leftarrow \mathcal{g}_ \theta(\mathcal{F}_ \theta(\mathca
 
 $$\mathcal{z}_ \xi \leftarrow \mathcal{g}_ \xi(\mathcal{F}_ \xi(\mathcal{T}'(x))) \qquad (3)$$
 
-$$\mathcal{q}_ \theta \leftarrow \mathcal{h}_ \theta(z_\theta) \qquad (4)$$
-
-
+$$\mathcal{q}_ \theta \leftarrow \mathcal{h}_ \theta(z_\theta) \qquad (4)$$s
 
  In [2] The optimization process is hypothesized to be an EM algorithm Expectation-Maximization:
 
