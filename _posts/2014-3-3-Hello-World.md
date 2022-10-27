@@ -72,7 +72,8 @@ by a scalar $\lambda$
 
 $$\xi \leftarrow \lambda * \theta$$
 
-Another paper that takes from [1] is 
+Another paper that takes from [1] is SimSiam [2] that hypotisizes the optimization process of the byol dynamics. There are some differences in the architecture . First of all
+There is only one network , in fact in the paper empirical data show that having 2 netowrks where one gets updated through EMA is not compulsary for it to working. The setup is as follows: only one network with a backend layer, projection layer and a predictor layer. As before the input **x** gets distorted before being processed by the network.
  In [2] The optimization process is hypothesized to be an EM algorithm Expectation-Maximization:
 
 $$ \mathcal{L}(\theta, \eta) = \mathbb{E}_x, _\mathcal{T}[\lVert\mathcal{F} _\theta(\mathcal{T}(x) - \eta_x)\rVert ^2 _2] \qquad (1) $$
