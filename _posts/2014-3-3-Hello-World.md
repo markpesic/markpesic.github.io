@@ -22,7 +22,7 @@ In all the methods below we used the same image augmentation as in [SIMCLR].
 
 BYOL (Bootstrap Your Own Latent) uses 2 asymmetrical neural nets , one is called online network and the other is called target network . The Online network has a predictor on top of the projector module, furthermore the target network doesn’t get updated through backprop, but uses EMA (Exponential moving average). The loss is a standard mean sqared error on normalized output embeddings. The images before getting passed into the network gets augmeted in 2 different views. Now it's unclear why this algorithm should work in the first place becuase it seems like , there’s nothing that stops the optimization process to let the 2 networks output constant embeddings so the loss is minimized, but this is not the case. In fact BYOL can learn really useful feature embeddings. In [2] [3] was observed that eliminating the stop-gradient or the predicator component leads to collapse representation.
 
-- $\mathcal{T}$ data augmentation
+- $$\mathcal{T}$$ data augmentation
 - $\mathcal{T}'$ data augmentation 
 - $\mathcal{F}_\theta$ the online network (the backend, a resnet architecture)
 - $\mathcal{F}_\xi$ the target network (the backend, a resnet architecture)
