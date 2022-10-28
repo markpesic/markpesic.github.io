@@ -72,8 +72,7 @@ by a scalar $\lambda$
 
 $$\xi \leftarrow \lambda * \theta$$
 
-Another paper that takes from [1] is SimSiam [2] that hypotisizes the optimization process of the byol dynamics. There are some differences in the architecture . First of all
-There is only one network , in fact in the paper empirical data show that having 2 netowrks where one gets updated through EMA is not compulsary for it to working. The setup is as follows: only one network with a backend layer, projection layer and a predictor layer. As before the input **x** gets distorted before being processed by the network.
+Another paper that takes from [1] is SimSiam [2] that tries to explain the optimization process of the stopgradient and the prediction head. There are some differences in the architecture of SimSiam respect byols' one. First of all there is only one network , in fact in the paper the empirical data show that having 2 networks, where one gets updated through EMA is not compulsary for the system to work. The setup is as follows: only one network with a backend layer, projection layer and a predictor layer. As before the input **x** gets distorted before being processed by the network. Now both the vies gets through the network one of the views gets through the predictor head , and the other not. THe one that passes only through the backend layer and projection layer , when calculating the loss will be "detached" () the gradient will not be backpropagated
  In [2] The optimization process is hypothesized to be an EM algorithm Expectation-Maximization:
 
 $$ \mathcal{L}(\theta, \eta) = \mathbb{E}_x, _\mathcal{T}[\lVert\mathcal{F} _\theta(\mathcal{T}(x) - \eta_x)\rVert ^2 _2] \qquad (1) $$
