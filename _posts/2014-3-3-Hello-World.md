@@ -23,14 +23,14 @@ In all the methods below we used the same image augmentation as in [SIMCLR].
 BYOL (Bootstrap Your Own Latent) uses 2 asymmetrical neural nets , one is called online network and the other is called target network . The Online network has a predictor on top of the projector module, furthermore the target network doesn’t get updated through backprop, but uses EMA (Exponential moving average). The loss is a standard mean sqared error on normalized output embeddings. The images before getting passed into the network gets augmeted in 2 different views. Now it's unclear why this algorithm should work in the first place becuase it seems like , there’s nothing that stops the optimization process to let the 2 networks output constant embeddings so the loss is minimized, but this is not the case. In fact BYOL can learn really useful feature embeddings. In [2] [3] was observed that eliminating the stop-gradient or the predicator component leads to collapse representation.
 
 - $$\mathcal{T}$$ data augmentation
-- $\mathcal{T}'$ data augmentation 
-- $\mathcal{F}_\theta$ the online network (the backend, a resnet architecture)
-- $\mathcal{F}_\xi$ the target network (the backend, a resnet architecture)
-- $\mathcal{g}_\theta$ the projector of the online network
-- $\mathcal{g}_\xi$ the projector of the target network
-- $\mathcal{h}_\theta$ the predictor
+- $$\mathcal{T}'$$ data augmentation 
+- $$\mathcal{F}_\theta$$ the online network (the backend, a resnet architecture)
+- $$\mathcal{F}_\xi$$ the target network (the backend, a resnet architecture)
+- $$\mathcal{g}_\theta$$ the projector of the online network
+- $$\mathcal{g}_\xi$$ the projector of the target network
+- $$\mathcal{h}_\theta$$ the predictor
 
-First of all given two different data augmentation distribution $\mathcal{T}$ $\mathcal{T}'$ (with the same trasformations). The input image **x** is passed through the data augmentations.
+First of all given two different data augmentation distribution $$\mathcal{T}$$ $$\mathcal{T}'$$ (with the same trasformations). The input image **x** is passed through the data augmentations.
 Then respectively the images get through the two networks :
 
 $$\mathcal{z}_ \theta \leftarrow \mathcal{g}_ \theta(\mathcal{F}_ \theta(\mathcal{T}(x))) \qquad (2)$$
@@ -47,10 +47,10 @@ $$\hat{\mathcal{z}}_ \xi \leftarrow \dfrac{\mathcal{z}_ \xi }{\lVert \mathcal{z}
 
 The $\mathcal{L}_ {BYOL}$ is the MSE loss between two normalized vectors. This loss is applied twice, so that the loss is symmetrical.
 Essentialy the 2 networks together outputs 4 vectors:
-- $\mathcal{q}_ \theta$ that comes from $\mathcal{T}(x)$
-- $\mathcal{q}'_ \theta$ that comes from $\mathcal{T}'(x)$
-- $\mathcal{z}_ \xi$ that comes from $\mathcal{T}'(x)$
-- $\mathcal{z}'_ \xi$ that comes from $\mathcal{T}(x)$. 
+- $$\mathcal{q}_ \theta$$ that comes from $$\mathcal{T}(x)$$
+- $$\mathcal{q}'_ \theta$$ that comes from $$\mathcal{T}'(x)$$
+- $$\mathcal{z}_ \xi$$ that comes from $$\mathcal{T}'(x)$$
+- $$\mathcal{z}'_ \xi$$ that comes from $$\mathcal{T}(x)$$. 
 
 $$\mathcal{L}_ {BYOL} = \lVert \hat{\mathcal{q}}_ \theta - \hat{\mathcal{z}}_ \xi \rVert ^2 _2 \qquad (7)$$
 
@@ -68,12 +68,11 @@ $$\xi \leftarrow \tau\xi + (1 - \tau)\theta \qquad(1)$$
 The $\tau$ is a hyperparameter that has a vale between 0 and 1. SGD is used as the optimizer with weight decay and LARS applied to the online network.
 
 In the byol paper was also observed that there is also another way for optimizing the target network, that is simply multiplying the updated parameters of the online network
-by a scalar $\lambda$  
+by a scalar $$\lambda$$  
 
 $$\xi \leftarrow \lambda * \theta$$
 
-Another paper that takes from [1] is SimSiam [2] that tries to explain the optimization process of the stopgradient and the prediction head. There are some differences in the architecture of SimSiam respect byols' one. First of all there is only one network , in fact in the paper the empirical data show that having 2 networks, where one gets updated through EMA is not compulsary for the system to work. The setup is as follows: only one network with a backend layer, projection layer and a predictor layer. As before the input **x** gets distorted before being processed by the network. Now both the vies gets through the network one of the views gets through the predictor head , and the other not. THe one that passes only through the backend layer and projection layer , when calculating the loss will be "detached" () the gradient will not be backpropagated. The loss is a cosine loss because the output embeddings gets normalized, like in byol
- In [2] The optimization process is hypothesized to be an EM algorithm Expectation-Maximization:
+Another paper that takes from [1] is SimSiam [2] that tries to explain the optimization process of the stopgradient and the prediction head. There are some differences in the architecture of SimSiam respect byols' one. First of all there is only one network , in fact in the paper the empirical data show that having 2 networks, where one gets updated through EMA is not compulsary for the system to work. The setup is as follows: only one network with a backend layer, projection layer and a predictor layer. As before the input **x** gets distorted before being processed by the network. Now both the views gets through the network one of the views gets through the predictor head , and the other not. The one that passes only through the backend layer and projection layer , when calculating the loss will be "detached" (the gradient will not be backpropagated).The optimization process is hypothesized to be an EM algorithm Expectation-Maximization:
 
 $$ \mathcal{L}(\theta, \eta) = \mathbb{E}_x, _\mathcal{T}[\lVert\mathcal{F} _\theta(\mathcal{T}(x) - \eta_x)\rVert ^2 _2] \qquad (1) $$
 
