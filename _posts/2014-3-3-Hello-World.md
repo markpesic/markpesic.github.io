@@ -18,8 +18,7 @@ etc...
 In all the methods below we used the same image augmentation as in [SIMCLR].
 ## BYOL
 
-![byol images](https://github.com/markpesic/markpesic.github.io/blob/master/images/byol.png)
-
+![byol images](https://github.com/markpesic/markpesic.github.io/blob/master/images/byol.png?raw=true)
 BYOL (Bootstrap Your Own Latent) uses 2 asymmetrical neural nets , one is called online network and the other is called target network . The Online network has a predictor on top of the projector module, furthermore the target network doesn’t get updated through backprop, but uses EMA (Exponential moving average). The loss is a standard mean sqared error on normalized output embeddings. The images before getting passed into the network gets augmeted in 2 different views. Now it's unclear why this algorithm should work in the first place becuase it seems like , there’s nothing that stops the optimization process to let the 2 networks output constant embeddings so the loss is minimized, but this is not the case. In fact BYOL can learn really useful feature embeddings. In [2] [3] was observed that eliminating the stop-gradient or the predicator component leads to collapse representation.
 
 - $$\mathcal{T}$$ data augmentation
@@ -45,7 +44,7 @@ $$\hat{\mathcal{q}}_ \theta \leftarrow \dfrac{\mathcal{q}_ \theta}{\lVert \mathc
 
 $$\hat{\mathcal{z}}_ \xi \leftarrow \dfrac{\mathcal{z}_ \xi }{\lVert \mathcal{z}_ \xi \rVert} \qquad (6)$$
 
-The $\mathcal{L}_ {BYOL}$ is the MSE loss between two normalized vectors. This loss is applied twice, so that the loss is symmetrical.
+The $\mathcal{L}_{BYOL}$ is the MSE loss between two normalized vectors. This loss is applied twice, so that the loss is symmetrical.
 Essentialy the 2 networks together outputs 4 vectors:
 - $$\mathcal{q}_ \theta$$ that comes from $$\mathcal{T}(x)$$
 - $$\mathcal{q}'_ \theta$$ that comes from $$\mathcal{T}'(x)$$
@@ -82,6 +81,6 @@ In (1) the loss is the average over the distribution of images and transformatio
 $$\theta^t = arg\min_{\theta} \mathcal{L}(\theta, \eta^t-1) \qquad (3)$$
 $$\eta^t = arg\min_{\eta} \mathcal{L}(\theta^t, \eta) \qquad (4)$$
 
-The first subproblem (3) is a solved applying the stopgradient to $\eta^t-1$ 
+The first subproblem (3) is a solved applying the stopgradient to $\eta^ t-1$ 
 
 
