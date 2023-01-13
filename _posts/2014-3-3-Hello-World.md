@@ -44,7 +44,7 @@ $$\hat{\mathcal{q}}_ \theta \leftarrow \dfrac{\mathcal{q}_ \theta}{\lVert \mathc
 
 $$\hat{\mathcal{z}}_ \xi \leftarrow \dfrac{\mathcal{z}_ \xi }{\lVert \mathcal{z}_ \xi \rVert} \qquad (6)$$
 
-The $\mathcal{L}_{BYOL}$ is the MSE loss between two normalized vectors. This loss is applied twice, so that the loss is symmetrical.
+The $ \mathcal{L}_{BYOL} $ is the MSE loss between two normalized vectors. This loss is applied twice, so that the loss is symmetrical.
 Essentialy the 2 networks together outputs 4 vectors:
 - $$\mathcal{q}_ \theta$$ that comes from $$\mathcal{T}(x)$$
 - $$\mathcal{q}'_ \theta$$ that comes from $$\mathcal{T}'(x)$$
@@ -71,7 +71,7 @@ by a scalar $$\lambda$$
 
 $$\xi \leftarrow \lambda * \theta$$
 
-Another paper that takes from [1] is SimSiam [2] that tries to explain the optimization process of the stopgradient and the prediction head. There are some differences in the architecture of SimSiam respect byols' one. First of all there is only one network , in fact in the paper the empirical data show that having 2 networks, where one gets updated through EMA is not compulsary for the system to work. The setup is as follows: only one network with a backend layer, projection layer and a predictor layer. As before the input **x** gets distorted before being processed by the network. Now both the views gets through the network one of the views gets through the predictor head , and the other not. The one that passes only through the backend layer and projection layer , when calculating the loss will be "detached" (the gradient will not be backpropagated).The optimization process is hypothesized to be an EM algorithm Expectation-Maximization:
+Another paper that takes from [1] is SimSiam [2] that tries to explain the optimization process of the stopgradient and the prediction head. There are some differences in the architecture of SimSiam respect byols' one. First of all there is only one network , in fact in the paper the empirical data show that having 2 networks, where one gets updated through EMA is not compulsary for the system to work. The setup is as follows: only one network with a backend layer, projection layer and a predictor layer. As before the input **x** gets distorted before being processed by the network. Now both the views gets through the network one of the views gets through the predictor head , and the other not. The one that passes only through the backend layer and projection layer , when calculating the loss will be "detached" (the gradient will not be backpropagated).The optimization process is hypothesized to be an EM algorithm Expectation-Maximization like algorithm:
 
 $$ \mathcal{L}(\theta, \eta) = \mathbb{E}_x, _\mathcal{T}[\lVert\mathcal{F} _\theta(\mathcal{T}(x) - \eta_x)\rVert ^2 _2] \qquad (1) $$
 
@@ -81,6 +81,6 @@ In (1) the loss is the average over the distribution of images and transformatio
 $$\theta^t = arg\min_{\theta} \mathcal{L}(\theta, \eta^t-1) \qquad (3)$$
 $$\eta^t = arg\min_{\eta} \mathcal{L}(\theta^t, \eta) \qquad (4)$$
 
-The first subproblem (3) is a solved applying the stopgradient to $\eta^ t-1$ 
+The first subproblem (3) is a solved applying the stopgradient to $ \eta^ t-1 $ 
 
 
