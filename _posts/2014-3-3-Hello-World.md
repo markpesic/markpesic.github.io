@@ -67,7 +67,7 @@ $$\xi \leftarrow \tau\xi + (1 - \tau)\theta \qquad(1)$$
 The $\tau$ is a hyperparameter that has a vale between 0 and 1. SGD is used as the optimizer with weight decay and LARS applied to the online network.
 
 In the byol paper was also observed that there is also another way for optimizing the target network, that is simply multiplying the updated parameters of the online network
-by a scalar $$\lambda$$  
+by a scalar $$\lambda $$  
 
 $$\xi \leftarrow \lambda * \theta$$
 
@@ -77,10 +77,10 @@ $$ \mathcal{L}(\theta, \eta) = \mathbb{E}_x, _\mathcal{T}[\lVert\mathcal{F} _\th
 
 $$ \min_{\theta,\eta} \mathcal{L}(\theta, \eta) \qquad (2) $$
 
-In (1) the loss is the average over the distribution of images and transformations for the cosine similarity loss between the projector of the online network and $ \eta $ (Notice that in (1) is not included the predictor). (2) is the objective that gets minimized respect to $\theta$ and $\eta$. So the optimization of the objective gets split in two subproblems :
+In (1) the loss is the average over the distribution of images and transformations for the cosine similarity loss between the projector of the online network and $ \eta $ (Notice that in (1) is not included the predictor). (2) is the objective that gets minimized respect to $\theta$ and $\eta $. So the optimization of the objective gets split in two subproblems :
 $$\theta^t = arg\min_{\theta} \mathcal{L}(\theta, \eta^t-1) \qquad (3)$$
 $$\eta^t = arg\min_{\eta} \mathcal{L}(\theta^t, \eta) \qquad (4)$$
 
-The first subproblem (3) is a solved applying the stopgradient to $ \eta^ t-1 $ 
+The first subproblem (3) is a solved applying the stopgradient to $ \eta^t-1 $ 
 
 
